@@ -32,6 +32,7 @@ services:
       retries: 5
 
   redis:
+    # Reserved for future caching/session workloads.
     image: redis:7-alpine
     container_name: northstar-redis
     ports:

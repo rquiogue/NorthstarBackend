@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Role } from '@/core/enums/role.enum';
 import { UsersService } from '@/modules/users/users.service';
 
 describe('UsersService', () => {
@@ -16,7 +17,7 @@ describe('UsersService', () => {
     expect(service.findProfile('user-1')).toEqual({
       id: 'user-1',
       email: 'placeholder@example.com',
-      roles: ['user'],
+      roles: [Role.USER],
     });
   });
 });

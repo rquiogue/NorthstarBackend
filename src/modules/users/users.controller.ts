@@ -1,4 +1,9 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { CurrentUser } from '@/modules/auth/decorators/current-user.decorator';
 import { Roles } from '@/modules/auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/modules/auth/guards/jwt-auth.guard';
@@ -15,7 +20,10 @@ export class UsersController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @Roles(Role.USER, Role.ADMIN)
-  getMe(@CurrentUser('sub') userId: string = 'placeholder-user-id') {
+  getMe(@CurrentUser('sub') userId?: string) {
+    if (!userId) {
+      throw new UnauthorizedException('User context not found');
+    }
     return this.usersService.findProfile(userId);
   }
 }
