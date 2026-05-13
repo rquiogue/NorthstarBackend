@@ -1,0 +1,9 @@
+version: 2
+
+# Ignore placeholder/example credential files.
+# These files contain only template values intended to be replaced
+# and must never hold real secrets.
+ignore-paths:
+  - ".env.example"
+  - "src/config/database.config.ts"
+  - "src/config/env.validation.ts"
