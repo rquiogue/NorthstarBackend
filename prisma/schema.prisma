@@ -17,7 +17,7 @@ model User {
   email            String   @unique
   passwordHash     String
   refreshTokenHash String?
-  role             Role     @default(user)
+  roles            Role[]   @default([user])
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }

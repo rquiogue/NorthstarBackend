@@ -28,19 +28,15 @@ export class AuthService {
   async register(
     dto: RegisterDto,
   ): Promise<{ user: AuthUser; tokens: AuthTokens }> {
-    const user: AuthUser = {
-      id: 'placeholder-user-id',
-      email: dto.email,
-      roles: [Role.USER],
-    };
-
-    await this.hashPassword(dto.password);
+    const user = await this.createPlaceholderUser(dto);
     const tokens = await this.signTokens(user);
 
     return { user, tokens };
   }
 
   async login(dto: LoginDto): Promise<{ user: AuthUser; tokens: AuthTokens }> {
+    await this.validatePlaceholderCredentials(dto.password);
+
     const user: AuthUser = {
       id: 'placeholder-user-id',
       email: dto.email,
@@ -80,6 +76,29 @@ export class AuthService {
       10,
     );
     return bcrypt.hash(password, saltRounds);
+  }
+
+  private async createPlaceholderUser(dto: RegisterDto): Promise<AuthUser> {
+    const passwordHash = await this.hashPassword(dto.password);
+    if (passwordHash.length === 0) {
+      throw new UnauthorizedException('Unable to hash password');
+    }
+
+    return {
+      id: 'placeholder-user-id',
+      email: dto.email,
+      roles: [Role.USER],
+    };
+  }
+
+  private async validatePlaceholderCredentials(
+    password: string,
+  ): Promise<void> {
+    const passwordHash = await this.hashPassword(password);
+    const isValid = await bcrypt.compare(password, passwordHash);
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
   }
 
   private async signTokens(user: AuthUser): Promise<AuthTokens> {

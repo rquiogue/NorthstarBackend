@@ -7,7 +7,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL,
     "refreshTokenHash" TEXT,
-    "role" "Role" NOT NULL DEFAULT 'user',
+    "roles" "Role"[] NOT NULL DEFAULT ARRAY['user']::"Role"[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
